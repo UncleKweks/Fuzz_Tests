@@ -32,7 +32,7 @@ contract Savings {
         token = Token(tokenAddress);
     }
 
-    // @notice deposit allows user to deposit into the system
+    // @notice deposit allows user to deposit into the systemsrc/Savings.sol
     function deposit(uint256 amount) public {
         require(amount >= MIN_DEPOSIT_AMOUNT);
 
@@ -50,12 +50,13 @@ contract Savings {
         emit Deposit(msg.sender, amount, totalDeposited);
     }
 
+// Invariant: totalDeposited = sum of all user balances)
     function withdraw(uint256 amount, address _addr) public {
         require(balances[msg.sender] > amount, "insufficient balance");
         balances[msg.sender] -= amount;
         totalDeposited -= amount;
         token.transfer(_addr, amount);
-        emit Withdraw(msg.sender, amount);
+        emit Withdraw(msg.sender, amount);                                         
     }
 
     function getInterestPerAnnum() public {
