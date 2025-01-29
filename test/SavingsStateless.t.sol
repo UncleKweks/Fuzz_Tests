@@ -16,7 +16,6 @@ contract SavingsTest is Test {
     function setUp() public {
         token = new Token();
         savings = new Savings(address(token));
-        address fakeUser1 = vm.addr(1); 
 
         // Mint tokens to the user for testing
         token.mint(user, type(uint256).max);
@@ -27,10 +26,11 @@ contract SavingsTest is Test {
     }
 
     function testStatelessDepositLessThanMinimumAmount(uint256 amount) public {
-        amount = bound(amount, 0, 1e18);
+        // Bound amount to be less than MIN_DEPOSIT_AMOUNT but not zero
+        amount = bound(amount, 1, MIN_DEPOSIT_AMOUNT - 1);
 
         vm.startPrank(user);
-        vm.expectRevert();
+        vm.expectRevert("Amount below minimum");
         savings.deposit(amount);
         vm.stopPrank();
 
